@@ -716,11 +716,13 @@
               <option value="Kelas XB">Kelas XB</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="loginStudentPass" placeholder="Masukkan password kamu" required />
-          </div>
-          <button type="submit" class="btn-check full-width-btn">🚀 Masuk &amp; Mulai Belajar</button>
+         <div class="form-group">
+  <label>Password</label>
+  <div class="password-input-wrap">
+    <input type="password" id="loginStudentPass" placeholder="Masukkan password kamu" required />
+    <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('loginStudentPass', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+  </div>
+</div>
         </form>
 
         <!-- FORM REGISTRASI SISWA -->
