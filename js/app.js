@@ -47,6 +47,8 @@ function refreshAppState() {
     document.getElementById('navUserLabel').textContent = 'Kelas X - Tamu';
     document.getElementById('navAuthBtn').textContent = 'Masuk / Daftar';
     navAdminBtn.classList.add('hidden');
+    document.getElementById('authBannerTitle').textContent = 'Portal Akun Siswa (Kelas XA & XB) & Guru Admin';
+    document.getElementById('authBannerDesc').textContent = 'Masuk atau daftar terlebih dahulu agar skor game, Pretest, Posttest, dan N-Gain tersimpan otomatis ke database kelas & Google Sheets.';
   }
 
   // Update Poin & Progress Bar
@@ -59,12 +61,21 @@ function refreshAppState() {
   document.getElementById('progressSummaryText').textContent = `${pct}% • ${doneCount}/4 Level Selesai`;
 
   // Update Status Kartu Misi C1-C4
+  const defaultStatuses = {
+    1: { cls: 'mission-status status-ready', txt: '✦ Siap Dimainkan' },
+    2: { cls: 'mission-status status-active', txt: '▶ Sedang Berjalan' },
+    3: { cls: 'mission-status status-locked', txt: '🔒 Klik untuk Buka' },
+    4: { cls: 'mission-status status-locked', txt: '🔒 Klik untuk Buka' }
+  };
   for (let lvl = 1; lvl <= 4; lvl++) {
     const statusEl = document.getElementById(`status-level-${lvl}`);
     if (!statusEl) continue;
     if (st.completedLevels.includes(lvl)) {
       statusEl.className = 'mission-status status-done';
       statusEl.textContent = '✔ Level Selesai';
+    } else {
+      statusEl.className = defaultStatuses[lvl].cls;
+      statusEl.textContent = defaultStatuses[lvl].txt;
     }
   }
 
