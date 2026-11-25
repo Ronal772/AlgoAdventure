@@ -1,5 +1,4 @@
 // ==================== DATA BANK SOAL, MISI & KONFIGURASI ====================
-
 const STORAGE_KEYS = {
   STUDENTS: 'algo_adv_students_v2',
   SESSION: 'algo_adv_session_v2',
@@ -7,19 +6,10 @@ const STORAGE_KEYS = {
   POSTTEST_BANK: 'algo_adv_posttest_v2',
   HEADER_CFG: 'algo_adv_header_v2',
   GSHEET_URL: 'algo_adv_gsheet_v2',
-  ADMIN_AUTH: 'algo_adv_admin_auth_v2'
+  ADMIN_CREDS: 'algo_adv_admin_creds_v2'
 };
 
-const STORAGE_KEYS = {
-  STUDENTS: 'algo_adv_students_v2',
-  SESSION: 'algo_adv_session_v2',
-  PRETEST_BANK: 'algo_adv_pretest_v2',
-  POSTTEST_BANK: 'algo_adv_posttest_v2',
-  HEADER_CFG: 'algo_adv_header_v2',
-  GSHEET_URL: 'algo_adv_gsheet_v2'
-};
-
-const ADMIN_CREDENTIALS = {
+const DEFAULT_ADMIN_CREDENTIALS = {
   username: 'admin',
   password: 'admin123'
 };
