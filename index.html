@@ -425,8 +425,12 @@
         <div id="questionsContainer" class="questions-list"></div>
 
         <div class="quiz-submit-bar">
-          <button class="btn-reset" onclick="cancelQuiz()">Batal</button>
-          <button class="btn-check btn-submit-quiz" onclick="submitQuiz()">✅ Selesai &amp; Hitung Skor</button>
+          <button type="button" class="btn-reset" onclick="cancelQuiz()">Batal</button>
+          <div class="quiz-step-buttons">
+            <button type="button" class="btn-nav-step" id="btnPrevQuestion" onclick="prevQuizQuestion()">← Sebelumnya</button>
+            <button type="button" class="btn-next-step" id="btnNextQuestion" onclick="nextQuizQuestion()">Next →</button>
+            <button type="button" class="btn-check btn-submit-quiz" onclick="submitQuiz()">✅ Selesai &amp; Hitung Skor</button>
+          </div>
         </div>
       </div>
 
@@ -689,7 +693,10 @@
               <label>Password Admin Baru</label>
               <div class="password-input-wrap">
                 <input type="password" id="newAdminPasswordInput" minlength="4" required />
-                <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('newAdminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+                <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('newAdminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">
+                  <svg class="eye-open-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="M5 6.5 3.5 5"/><path d="M8.5 5 7.5 3"/><path d="M12 4.5V2.5"/><path d="M15.5 5l1-2"/><path d="M19 6.5 20.5 5"/></svg>
+                  <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5c2.2 3.2 5.4 4.8 9 4.8s6.8-1.6 9-4.8"/><path d="M5 12.8l-1.5 2"/><path d="M8.5 14.3l-.8 2.2"/><path d="M12 15.3v2.4"/><path d="M15.5 14.3l.8 2.2"/><path d="M19 12.8l1.5 2"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -733,7 +740,10 @@
             <label>Password</label>
             <div class="password-input-wrap">
               <input type="password" id="loginStudentPass" placeholder="Masukkan password kamu" required />
-              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('loginStudentPass', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('loginStudentPass', this)" aria-label="Lihat atau sembunyikan password">
+                <svg class="eye-open-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="M5 6.5 3.5 5"/><path d="M8.5 5 7.5 3"/><path d="M12 4.5V2.5"/><path d="M15.5 5l1-2"/><path d="M19 6.5 20.5 5"/></svg>
+                <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5c2.2 3.2 5.4 4.8 9 4.8s6.8-1.6 9-4.8"/><path d="M5 12.8l-1.5 2"/><path d="M8.5 14.3l-.8 2.2"/><path d="M12 15.3v2.4"/><path d="M15.5 14.3l.8 2.2"/><path d="M19 12.8l1.5 2"/></svg>
+              </button>
             </div>
           </div>
           <button type="submit" class="btn-check full-width-btn">🚀 Masuk &amp; Mulai Belajar</button>
@@ -755,7 +765,10 @@
             <label>Buat Password</label>
             <div class="password-input-wrap">
               <input type="password" id="regStudentPass" placeholder="Minimal 4 karakter" minlength="4" required />
-              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('regStudentPass', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('regStudentPass', this)" aria-label="Lihat atau sembunyikan password">
+                <svg class="eye-open-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="M5 6.5 3.5 5"/><path d="M8.5 5 7.5 3"/><path d="M12 4.5V2.5"/><path d="M15.5 5l1-2"/><path d="M19 6.5 20.5 5"/></svg>
+                <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5c2.2 3.2 5.4 4.8 9 4.8s6.8-1.6 9-4.8"/><path d="M5 12.8l-1.5 2"/><path d="M8.5 14.3l-.8 2.2"/><path d="M12 15.3v2.4"/><path d="M15.5 14.3l.8 2.2"/><path d="M19 12.8l1.5 2"/></svg>
+              </button>
             </div>
           </div>
           <button type="submit" class="btn-hero-play full-width-btn">✨ Daftar &amp; Simpan ke Database</button>
@@ -774,7 +787,10 @@
             <label>Password Admin</label>
             <div class="password-input-wrap">
               <input type="password" id="adminPasswordInput" placeholder="••••••" required />
-              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('adminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+              <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('adminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">
+                <svg class="eye-open-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="M5 6.5 3.5 5"/><path d="M8.5 5 7.5 3"/><path d="M12 4.5V2.5"/><path d="M15.5 5l1-2"/><path d="M19 6.5 20.5 5"/></svg>
+                <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5c2.2 3.2 5.4 4.8 9 4.8s6.8-1.6 9-4.8"/><path d="M5 12.8l-1.5 2"/><path d="M8.5 14.3l-.8 2.2"/><path d="M12 15.3v2.4"/><path d="M15.5 14.3l.8 2.2"/><path d="M19 12.8l1.5 2"/></svg>
+              </button>
             </div>
           </div>
           <button type="submit" class="btn-admin-submit full-width-btn">🛡️ Masuk Panel Admin</button>
@@ -838,4 +854,3 @@
   <script src="js/app.js"></script>
 </body>
 </html>
-
