@@ -1,75 +1,22 @@
 // ==================== AUTH SISWA, ADMIN PANEL, GOOGLE SHEETS & EXCEL EXPORT ====================
 
-
-function togglePasswordVisibility(inputId, btnEl) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  const isHidden = input.type === 'password';
-  input.type = isHidden ? 'text' : 'password';
-  if (btnEl) {
-    btnEl.textContent = isHidden ? '🙈' : '👁️';
-  }
-}
-
 function getAdminCredentials() {
-  const raw = localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH);
+  const raw = localStorage.getItem(STORAGE_KEYS.ADMIN_CREDS);
   if (raw) {
     try {
       const parsed = JSON.parse(raw);
-      if (parsed && parsed.username && parsed.password) return parsed;
+      if (parsed.username && parsed.password) return parsed;
     } catch (e) {}
   }
-  return { ...ADMIN_CREDENTIALS };
+  return { ...DEFAULT_ADMIN_CREDENTIALS };
 }
 
-function handleAdminLogin(e) {
-  e.preventDefault();
-  const u = document.getElementById('adminUsernameInput').value.trim();
-  const p = document.getElementById('adminPasswordInput').value.trim();
-  const creds = getAdminCredentials();
-
-  if (u === creds.username && p === creds.password) {
-    setCurrentSession({ role: 'admin', name: creds.username });
-    closeAuthModal();
-    refreshAppState();
-    switchPage('admin');
-  } else {
-    alert('Username atau Password Admin salah!');
-  }
-}
-
-function loadAdminCredentialsUI() {
-  const creds = getAdminCredentials();
-  const uInput = document.getElementById('newAdminUsernameInput');
-  const pInput = document.getElementById('newAdminPasswordInput');
-  if (uInput) uInput.value = creds.username;
-  if (pInput) {
-    pInput.value = creds.password;
-    pInput.type = 'password';
-  }
-}
-
-function saveAdminCredentials(e) {
-  e.preventDefault();
-  const newUsername = document.getElementById('newAdminUsernameInput').value.trim();
-  const newPassword = document.getElementById('newAdminPasswordInput').value.trim();
-  if (!newUsername || newPassword.length < 4) {
-    alert('Username wajib diisi dan password minimal 4 karakter.');
-    return;
-  }
-  localStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, JSON.stringify({ username: newUsername, password: newPassword }));
-  const sess = getCurrentSession();
-  if (sess && sess.role === 'admin') {
-    setCurrentSession({ role: 'admin', name: newUsername });
-  }
-  alert('Username dan Password Admin berhasil diperbarui!');
-}
-
-function resetAdminCredentials() {
-  if (!confirm('Kembalikan username dan password admin ke bawaan awal (admin / admin123)?')) return;
-  localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
-  loadAdminCredentialsUI();
-  alert('Username dan Password Admin telah direset ke default.');
+function togglePasswordVisibility(inputId, btnEl) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  const isPass = inp.type === 'password';
+  inp.type = isPass ? 'text' : 'password';
+  if (btnEl) btnEl.textContent = isPass ? '🙈' : '👁️';
 }
 
 function getStudentsDB() {
@@ -208,14 +155,15 @@ function handleAdminLogin(e) {
   e.preventDefault();
   const u = document.getElementById('adminUsernameInput').value.trim();
   const p = document.getElementById('adminPasswordInput').value.trim();
+  const creds = getAdminCredentials();
 
-  if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
+  if (u === creds.username && p === creds.password) {
     setCurrentSession({ role: 'admin', name: 'Guru Admin' });
     closeAuthModal();
     refreshAppState();
     switchPage('admin');
   } else {
-    alert('Username atau Password Admin salah! (Default: admin / admin123)');
+    alert('Username atau Password Admin salah!');
   }
 }
 
@@ -232,17 +180,43 @@ let currentAdminClassFilter = 'ALL';
 function switchAdminTab(tabName, btnEl) {
   document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
   if (btnEl) btnEl.classList.add('active');
-
   ['siswa', 'soal', 'tampilan', 'gsheet', 'akun'].forEach(t => {
-    document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+    const sec = document.getElementById(`admin-tab-${t}`);
+    if (sec) sec.classList.add('hidden');
   });
-  document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+  const activeSec = document.getElementById(`admin-tab-${tabName}`);
+  if (activeSec) activeSec.classList.remove('hidden');
 
   if (tabName === 'siswa') renderAdminStudentTable();
-  if (tabName === 'soal') renderAdminQuestionList();
-  if (tabName === 'tampilan') loadAdminHeaderUI();
-  if (tabName === 'gsheet') loadAdminGSheetUI();
+  if (tabName === 'soal') initAdminQuestionSelector();
+  if (tabName === 'tampilan') loadHeaderSettingsUI();
+  if (tabName === 'gsheet') loadGoogleSheetUI();
   if (tabName === 'akun') loadAdminCredentialsUI();
+}
+
+function loadAdminCredentialsUI() {
+  const creds = getAdminCredentials();
+  document.getElementById('newAdminUsernameInput').value = creds.username;
+  document.getElementById('newAdminPasswordInput').value = creds.password;
+}
+
+function saveAdminCredentials(e) {
+  e.preventDefault();
+  const username = document.getElementById('newAdminUsernameInput').value.trim();
+  const password = document.getElementById('newAdminPasswordInput').value.trim();
+  if (!username || password.length < 4) {
+    alert('Username wajib diisi dan password minimal 4 karakter.');
+    return;
+  }
+  localStorage.setItem(STORAGE_KEYS.ADMIN_CREDS, JSON.stringify({ username, password }));
+  alert('Username dan password admin berhasil diperbarui!');
+}
+
+function resetAdminCredentials() {
+  if (!confirm('Kembalikan username dan password admin ke default (admin / admin123)?')) return;
+  localStorage.removeItem(STORAGE_KEYS.ADMIN_CREDS);
+  loadAdminCredentialsUI();
+  alert('Kredensial admin dikembalikan ke default.');
 }
 
 function filterAdminClass(filterVal, btnEl) {
@@ -422,7 +396,7 @@ function exportClassExcel(targetClass) {
     </html>
   `;
 
-  const blob = new Blob(['﻿', excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+  const blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
