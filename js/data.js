@@ -105,12 +105,7 @@ const MISSION_DATA = {
     badge: 'C3 • Menerapkan',
     title: 'Level 3: Menerapkan Percabangan & Looping',
     points: 150,
-    question: 'Perhatikan potongan algoritma:
-angka = 2
-ulangi 3 kali:
-   angka = angka * 2
-tampilkan angka
-Berapa nilai yang tampil di layar?',
+    question: 'Perhatikan potongan algoritma:\nangka = 2\nulangi 3 kali:\n   angka = angka * 2\ntampilkan angka\nBerapa nilai yang tampil di layar?',
     options: ['6', '8', '16', '32'],
     correct: 2,
     explanation: 'Hebat! Iterasi 1: 2×2=4, Iterasi 2: 4×2=8, Iterasi 3: 8×2=16.'
