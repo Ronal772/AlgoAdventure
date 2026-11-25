@@ -465,6 +465,7 @@
     <div class="main-container">
       <div class="page-hero-banner admin-hero-banner">
         <div class="admin-banner-flex">
+          <button class="admin-tab-btn" onclick="switchAdminTab('akun', this)">🔐 Akun Admin</button>
           <div>
             <h2>🛡️ Panel Kontrol Admin &amp; Guru Informatika</h2>
             <p>Kelola data login siswa Kelas XA &amp; XB, sinkronisasi Google Sheets, edit bank soal, ubah background header, dan unduh rekap nilai.</p>
@@ -660,6 +661,31 @@
             <span>Kode Google Apps Script (Code.gs)</span>
             <button class="btn-copy-code" onclick="copyAppsScriptCode()">📋 Salin Kode</button>
           </div>
+
+          <section id="admin-tab-akun" class="admin-panel-box hidden">
+  <h3>🔐 Pengaturan Username &amp; Password Admin</h3>
+  <p>Ubah nama login (username) dan password admin untuk keamanan panel guru.</p>
+
+  <form class="admin-cred-card" onsubmit="saveAdminCredentials(event)">
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Username Login Admin Baru</label>
+        <input type="text" id="newAdminUsernameInput" required />
+      </div>
+      <div class="form-group">
+        <label>Password Admin Baru</label>
+        <div class="password-input-wrap">
+          <input type="password" id="newAdminPasswordInput" minlength="4" required />
+          <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('newAdminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions-left">
+      <button type="submit" class="btn-check">💾 Simpan Username &amp; Password Admin</button>
+      <button type="button" class="btn-reset" onclick="resetAdminCredentials()">↺ Reset Default (admin / admin123)</button>
+    </div>
+  </form>
+</section>
           <pre id="appsScriptCodeBlock" class="apps-script-code">function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName("DataSiswa") || ss.insertSheet("DataSiswa");
@@ -739,10 +765,13 @@
               <option value="Kelas XB">Kelas XB</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Buat Password</label>
-            <input type="text" id="regStudentPass" placeholder="Minimal 4 karakter" minlength="4" required />
-          </div>
+    <div class="form-group">
+  <label>Buat Password</label>
+  <div class="password-input-wrap">
+    <input type="password" id="regStudentPass" placeholder="Minimal 4 karakter" minlength="4" required />
+    <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('regStudentPass', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+  </div>
+</div>
           <button type="submit" class="btn-hero-play full-width-btn">✨ Daftar &amp; Simpan ke Database</button>
         </form>
 
@@ -756,10 +785,13 @@
             <label>Username Admin</label>
             <input type="text" id="adminUsernameInput" placeholder="admin" required />
           </div>
-          <div class="form-group">
-            <label>Password Admin</label>
-            <input type="password" id="adminPasswordInput" placeholder="••••••" required />
-          </div>
+   <div class="form-group">
+  <label>Password Admin</label>
+  <div class="password-input-wrap">
+    <input type="password" id="adminPasswordInput" placeholder="••••••" required />
+    <button type="button" class="toggle-eye-btn" onclick="togglePasswordVisibility('adminPasswordInput', this)" aria-label="Lihat atau sembunyikan password">👁️</button>
+  </div>
+</div>
           <button type="submit" class="btn-admin-submit full-width-btn">🛡️ Masuk Panel Admin</button>
         </form>
 
