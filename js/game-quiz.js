@@ -35,36 +35,71 @@ function updateActiveProgress(updaterFn) {
 }
 
 // ==================== MODAL MISI C1-C4 ====================
+let selectedMissionOption = null;
+
 function openMissionModal(level) {
   const m = MISSION_DATA[level];
   if (!m) return;
+  selectedMissionOption = null;
   document.getElementById('modalBloomBadge').textContent = m.badge;
   document.getElementById('modalTitle').textContent = m.title;
 
   const optsHtml = m.options.map((opt, idx) => `
-    <label class="option-label" onclick="submitMissionAnswer(${level}, ${idx})">
+    <label class="option-label mission-opt-item" id="mission-opt-${idx}" onclick="selectMissionOption(${idx})">
+      <input type="radio" name="missionChoice" value="${idx}" style="accent-color:#1D4ED8; width:17px; height:17px;" />
       <strong>${String.fromCharCode(65 + idx)}.</strong> <span>${escapeHtml(opt)}</span>
     </label>
   `).join('');
+
+  const nextLevel = level < 4 ? level + 1 : null;
+  const nextBtnHtml = nextLevel
+    ? `<button type="button" id="btnNextMission" class="btn-next-step hidden" onclick="openMissionModal(${nextLevel})">Lanjut ke Level ${nextLevel} →</button>`
+    : `<button type="button" id="btnNextMission" class="btn-hero-play hidden" style="font-size:0.95rem; padding:10px 18px; border-radius:12px;" onclick="closeMissionModal()">🎉 Selesai Semua Level</button>`;
 
   document.getElementById('modalBody').innerHTML = `
     <p style="white-space:pre-line; font-weight:700; margin-bottom:14px; line-height:1.55;">${escapeHtml(m.question)}</p>
     <div class="options-grid">${optsHtml}</div>
     <div id="missionFeedback" class="feedback-banner hidden"></div>
+    <div class="mission-modal-actions" style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1.5px solid #E2E8F0;">
+      <button type="button" class="btn-reset" onclick="closeMissionModal()">Tutup</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" id="btnSubmitMission" class="btn-check" onclick="submitMissionAnswer(${level})">✔ Submit Jawaban</button>
+        ${nextBtnHtml}
+      </div>
+    </div>
   `;
   document.getElementById('missionModal').classList.remove('hidden');
+}
+
+function selectMissionOption(idx) {
+  selectedMissionOption = idx;
+  document.querySelectorAll('.mission-opt-item').forEach((el, i) => {
+    const isSel = i === idx;
+    el.style.borderColor = isSel ? '#1D4ED8' : '#CBD5E1';
+    el.style.background = isSel ? '#EFF6FF' : '#FFFFFF';
+    const radio = el.querySelector('input[type="radio"]');
+    if (radio) radio.checked = isSel;
+  });
 }
 
 function closeMissionModal() {
   document.getElementById('missionModal').classList.add('hidden');
 }
 
-function submitMissionAnswer(level, chosenIdx) {
+function submitMissionAnswer(level) {
   const m = MISSION_DATA[level];
   const fb = document.getElementById('missionFeedback');
   fb.classList.remove('hidden', 'feedback-success', 'feedback-error');
 
-  if (chosenIdx === m.correct) {
+  if (selectedMissionOption === null) {
+    fb.classList.add('feedback-error');
+    fb.innerHTML = '⚠️ <b>Pilih salah satu jawaban (A, B, C, atau D) terlebih dahulu!</b>';
+    return;
+  }
+
+  const nextBtn = document.getElementById('btnNextMission');
+
+  if (selectedMissionOption === m.correct) {
     fb.classList.add('feedback-success');
     fb.innerHTML = `🎉 <b>Benar! (+${m.points} Poin)</b><br/>${escapeHtml(m.explanation)}`;
     updateActiveProgress(st => {
@@ -74,9 +109,11 @@ function submitMissionAnswer(level, chosenIdx) {
       }
     });
     refreshAppState();
+    if (nextBtn) nextBtn.classList.remove('hidden');
   } else {
     fb.classList.add('feedback-error');
-    fb.innerHTML = `❌ <b>Kurang tepat!</b> Coba analisis kembali langkah algoritmanya.`;
+    fb.innerHTML = `❌ <b>Kurang tepat!</b> Silakan pilih jawaban lain lalu klik <b>Submit Jawaban</b> lagi, atau lanjut ke level berikutnya.`;
+    if (nextBtn) nextBtn.classList.remove('hidden');
   }
 }
 
