@@ -16,7 +16,16 @@ function togglePasswordVisibility(inputId, btnEl) {
   if (!inp) return;
   const isPass = inp.type === 'password';
   inp.type = isPass ? 'text' : 'password';
-  if (btnEl) btnEl.textContent = isPass ? '🙈' : '👁️';
+  if (btnEl) {
+    const openSvg = btnEl.querySelector('.eye-open-icon');
+    const closedSvg = btnEl.querySelector('.eye-closed-icon');
+    if (openSvg && closedSvg) {
+      // Saat password terlihat (text), tampilkan ikon mata tertutup (tutup password)
+      // Saat password tersembunyi (password), tampilkan ikon mata terbuka
+      openSvg.classList.toggle('hidden', isPass);
+      closedSvg.classList.toggle('hidden', !isPass);
+    }
+  }
 }
 
 function getStudentsDB() {
